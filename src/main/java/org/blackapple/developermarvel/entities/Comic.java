@@ -1,10 +1,7 @@
 package org.blackapple.developermarvel.entities;
 
 import javax.persistence.*;
-import java.util.Base64;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "comic")
@@ -79,5 +76,33 @@ public class Comic {
 
     public byte[] getImg() {
         return img;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comic comic = (Comic) o;
+        return Objects.equals(id, comic.id) && Objects.equals(title, comic.title) && Objects.equals(author, comic.author) && Objects.equals(published, comic.published) && Objects.equals(description, comic.description) && Arrays.equals(img, comic.img) && Objects.equals(characters, comic.characters);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, title, author, published, description, characters);
+        result = 31 * result + Arrays.hashCode(img);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Comic{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", published=" + published +
+                ", description='" + description + '\'' +
+                ", img=" + Arrays.toString(img) +
+                ", characters=" + characters +
+                '}';
     }
 }
