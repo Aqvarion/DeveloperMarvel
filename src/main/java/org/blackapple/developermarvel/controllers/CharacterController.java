@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/v1/public/characters")
@@ -22,8 +25,8 @@ public class CharacterController {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<?> create(@RequestBody Character character) {
-        characterService.create(character);
+    public ResponseEntity<?> create(@RequestPart(name = "comic") Character character,@RequestPart(name = "file") MultipartFile img) throws IOException {
+        characterService.create(character,img);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -46,8 +49,8 @@ public class CharacterController {
     }
 
     @GetMapping(value = "/character/{characterId}/comics")
-    public ResponseEntity<List<Comic>> readComics(@PathVariable(name = "characterId") int id){
-        final List<Comic> comics = characterService.readComics(id);
+    public ResponseEntity<Set<Comic>> readComics(@PathVariable(name = "characterId") Long id){
+        final Set<Comic> comics = characterService.readComics(id);
 
         return comics!=null && !comics.isEmpty()
                 ? new ResponseEntity<>(comics, HttpStatus.OK)
@@ -55,7 +58,7 @@ public class CharacterController {
     }
 
     @PutMapping("/{characterId}")
-    public ResponseEntity<?> update(@PathVariable(name = "characterId") int id, @RequestBody Character character) {
+    public ResponseEntity<?> update(@PathVariable(name = "characterId") Long id, @RequestBody Character character) {
         final boolean updated = characterService.update(character, id);
 
         return updated

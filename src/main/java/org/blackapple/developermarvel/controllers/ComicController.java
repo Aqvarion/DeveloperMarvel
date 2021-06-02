@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -22,9 +24,11 @@ public class ComicController {
         this.comicService = comicService;
     }
 
+
     @PostMapping(value = "")
-    public ResponseEntity<?> create(@RequestBody Comic comic){
-        comicService.create(comic);
+    public ResponseEntity<?> create(@RequestPart(name = "comic") Comic comic,@RequestPart(name = "file") MultipartFile img) throws IOException {
+
+        comicService.create(comic, img);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

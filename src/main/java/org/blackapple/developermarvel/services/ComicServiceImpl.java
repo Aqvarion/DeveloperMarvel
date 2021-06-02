@@ -5,7 +5,10 @@ import org.blackapple.developermarvel.entities.Comic;
 import org.blackapple.developermarvel.repostiroies.ComicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Set;
 
@@ -20,7 +23,8 @@ public class ComicServiceImpl implements ComicService{
     }
 
     @Override
-    public void create(Comic comic) {
+    public void create(Comic comic, MultipartFile img) throws IOException {
+        comic.setImg(Base64.getEncoder().encode(img.getBytes()));
         comicRepository.save(comic);
     }
 
@@ -57,8 +61,6 @@ public class ComicServiceImpl implements ComicService{
 
     @Override
     public Set<Character> readCharacters(Long id) {
-
-
 
         return comicRepository.findById(id).get().getCharacters();
     }

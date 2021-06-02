@@ -1,6 +1,7 @@
 package org.blackapple.developermarvel.entities;
 
 import javax.persistence.*;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,8 +22,13 @@ public class Comic {
     private Date published;
     @Column(name = "descript")
     private String description;
+
+    public void setImg(byte[] img) {
+        this.img = img;
+    }
+
     @Column(name = "img")
-    private String img;
+    private byte[] img;
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
@@ -35,13 +41,12 @@ public class Comic {
     public Comic() {
     }
 
-    public Comic(Long id, String title, String author, Date published, String description, String img) {
+    public Comic(Long id, String title, String author, Date published, String description) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.published = published;
         this.description = description;
-        this.img = img;
     }
 
     public void setId(Long id) {
@@ -72,7 +77,7 @@ public class Comic {
         return characters;
     }
 
-    public String getImg() {
+    public byte[] getImg() {
         return img;
     }
 }

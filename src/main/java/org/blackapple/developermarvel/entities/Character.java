@@ -1,5 +1,7 @@
 package org.blackapple.developermarvel.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,10 +18,13 @@ public class Character {
     private String title;
     @Column(name = "biography")
     private String biography;
+    @Lob
     @Column(name = "img")
-    private String img;
+    private byte[] img;
 
-    @ManyToMany(mappedBy = "characters")
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "characters", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     Set<Comic> comics = new HashSet<>();
 
     public Character() {
@@ -35,6 +40,10 @@ public class Character {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -43,7 +52,15 @@ public class Character {
         return biography;
     }
 
-    public String getImg() {
+    public Set<Comic> getComics() {
+        return comics;
+    }
+
+    public byte[] getImg() {
         return img;
+    }
+
+    public void setImg(byte[] img) {
+        this.img = img;
     }
 }

@@ -5,8 +5,12 @@ import org.blackapple.developermarvel.entities.Comic;
 import org.blackapple.developermarvel.repostiroies.CharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
+import java.util.Set;
 
 @Component("CharacterService")
 public class CharacterServiceImpl implements CharacterService{
@@ -19,8 +23,9 @@ public class CharacterServiceImpl implements CharacterService{
     }
 
     @Override
-    public void create(Character character){
-
+    public void create(Character character, MultipartFile img) throws IOException {
+        character.setImg(Base64.getEncoder().encode(img.getBytes()));
+        characterRepository.save(character);
     }
 
     @Override
@@ -34,7 +39,13 @@ public class CharacterServiceImpl implements CharacterService{
     }
 
     @Override
-    public boolean update(Character character, int id) {
+    public boolean update(Character character, Long id) {
+        if(characterRepository.existsById(id)){
+            character.setId(id);
+            characterRepository.save(character);
+            return true;
+        }
+
         return false;
     }
 
@@ -47,7 +58,8 @@ public class CharacterServiceImpl implements CharacterService{
     }
 
     @Override
-    public List<Comic> readComics(int id) {
-        return null;
+    public Set<Comic> readComics(Long id) {
+
+        return characterRepository.findById(id).get().getComics();
     }
 }
