@@ -71,12 +71,12 @@ public class Character {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Character character = (Character) o;
-        return Objects.equals(id, character.id) && Objects.equals(title, character.title) && Objects.equals(biography, character.biography) && Arrays.equals(img, character.img) && Objects.equals(comics, character.comics);
+        return Objects.equals(id, character.id) && Objects.equals(title, character.title) && Objects.equals(biography, character.biography) && Arrays.equals(img, character.img);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, title, biography, comics);
+        int result = Objects.hash(id, title, biography);
         result = 31 * result + Arrays.hashCode(img);
         return result;
     }

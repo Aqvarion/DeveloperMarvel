@@ -35,12 +35,15 @@ public class ComicServiceImpl implements ComicService{
 
     @Override
     public Comic read(Long id) {
-        return comicRepository.findById(id).get();
+        if(comicRepository.existsById(id))
+            return comicRepository.findById(id).get();
+        return null;
     }
 
     @Override
-    public boolean update(Comic comic, Long id) {
+    public boolean update(Comic comic, MultipartFile img, Long id) throws IOException {
         if(comicRepository.existsById(id)){
+            comic.setImg(Base64.getEncoder().encode(img.getBytes()));
             comic.setId(id);
             comicRepository.save(comic);
             return true;
@@ -61,7 +64,8 @@ public class ComicServiceImpl implements ComicService{
 
     @Override
     public Set<Character> readCharacters(Long id) {
-
-        return comicRepository.findById(id).get().getCharacters();
+        if(comicRepository.findById(id).isPresent())
+            return comicRepository.findById(id).get().getCharacters();
+        return null;
     }
 }

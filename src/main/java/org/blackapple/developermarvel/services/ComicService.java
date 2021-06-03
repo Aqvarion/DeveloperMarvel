@@ -16,7 +16,7 @@ public interface ComicService {
 
     Comic read(Long id);
 
-    boolean update(Comic comic, Long id);
+    boolean update(Comic comic, MultipartFile img, Long id) throws IOException;
 
     boolean delete(Long id);
 

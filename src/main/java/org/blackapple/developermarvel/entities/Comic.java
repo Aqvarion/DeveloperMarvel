@@ -1,5 +1,7 @@
 package org.blackapple.developermarvel.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -19,14 +21,11 @@ public class Comic {
     private Date published;
     @Column(name = "descript")
     private String description;
-
-    public void setImg(byte[] img) {
-        this.img = img;
-    }
-
+    @Lob
     @Column(name = "img")
     private byte[] img;
 
+    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "comic_character1",
@@ -78,17 +77,21 @@ public class Comic {
         return img;
     }
 
+    public void setImg(byte[] img) {
+        this.img = img;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Comic comic = (Comic) o;
-        return Objects.equals(id, comic.id) && Objects.equals(title, comic.title) && Objects.equals(author, comic.author) && Objects.equals(published, comic.published) && Objects.equals(description, comic.description) && Arrays.equals(img, comic.img) && Objects.equals(characters, comic.characters);
+        return Objects.equals(id, comic.id) && Objects.equals(title, comic.title) && Objects.equals(author, comic.author) && Objects.equals(published, comic.published) && Objects.equals(description, comic.description) && Arrays.equals(img, comic.img);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, title, author, published, description, characters);
+        int result = Objects.hash(id, title, author, published, description);
         result = 31 * result + Arrays.hashCode(img);
         return result;
     }

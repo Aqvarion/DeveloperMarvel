@@ -1027,7 +1027,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     </column>
     <column id="292" parent="286" name="img">
       <Position>4</Position>
-      <DataType>blob|0s</DataType>
+      <DataType>longblob|0s</DataType>
     </column>
     <key id="293" parent="286" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
@@ -1058,7 +1058,7 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     </column>
     <column id="299" parent="287" name="img">
       <Position>6</Position>
-      <DataType>blob|0s</DataType>
+      <DataType>longblob|0s</DataType>
     </column>
     <key id="300" parent="287" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>

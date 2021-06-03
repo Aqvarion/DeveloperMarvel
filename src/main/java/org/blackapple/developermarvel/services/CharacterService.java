@@ -16,7 +16,7 @@ public interface CharacterService {
 
     Character read(Long id);
 
-    boolean update(Character character, Long id);
+    boolean update(Character character, MultipartFile img, Long id) throws IOException;
 
     boolean delete(Long id);
 

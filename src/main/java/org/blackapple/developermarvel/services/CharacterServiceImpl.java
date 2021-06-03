@@ -35,12 +35,15 @@ public class CharacterServiceImpl implements CharacterService{
 
     @Override
     public Character read(Long id) {
-        return characterRepository.findById(id).get();
+        if (characterRepository.existsById(id))
+            return characterRepository.findById(id).get();
+        return null;
     }
 
     @Override
-    public boolean update(Character character, Long id) {
+    public boolean update(Character character, MultipartFile img, Long id) throws IOException {
         if(characterRepository.existsById(id)){
+            character.setImg(Base64.getEncoder().encode(img.getBytes()));
             character.setId(id);
             characterRepository.save(character);
             return true;
