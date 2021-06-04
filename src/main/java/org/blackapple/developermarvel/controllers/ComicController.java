@@ -26,7 +26,7 @@ public class ComicController {
 
 
     @PostMapping(value = "")
-    public ResponseEntity<?> create(@RequestPart(name = "comic") Comic comic, @RequestPart(name = "file") MultipartFile img) throws IOException {
+    public ResponseEntity<?> create(@RequestPart(name = "comic") Comic comic, @RequestPart(name = "img") MultipartFile img) throws IOException {
 
         comicService.create(comic, img);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -60,7 +60,7 @@ public class ComicController {
     }
 
     @PutMapping(value = "/{comicId}")
-    public ResponseEntity<?> update(@PathVariable(name = "comicId") Long id, @RequestPart(name = "comic") Comic comic, @RequestPart(name = "file") MultipartFile img) throws IOException {
+    public ResponseEntity<?> update(@PathVariable(name = "comicId") Long id, @RequestPart(name = "comic") Comic comic, @RequestPart(name = "img") MultipartFile img) throws IOException {
         final boolean updated = comicService.update(comic,img,id);
 
         return updated
