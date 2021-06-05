@@ -36,6 +36,7 @@ allows you to modify an existing comic by ID. Contains two parts **comic** and *
 DELETE method `http://localhost:8080/v1/public/comics/{{comicId}}`
 delete the existing comic by ID.   
 
+The project includes **swagger**. It provides more detailed information of all requests. You need to start the project and follow the [link](://localhost:8080/swagger-ui/index.html)
 ### Authors
 
 For communication and questions, you can write to the mail:
