@@ -39,6 +39,17 @@ delete the existing comic by ID.
 The project includes **swagger**. It provides more detailed information of all requests. 
 You need to start the project and follow [link](http://localhost:8080/swagger-ui/index.html)
 
+### Docker
+
+The project can be run as a Docker container. For this:
+1. Install [Docker](https://docs.docker.com/docker-for-windows/install/)
+2. Build the project if you have not built it yet 
+3. Collect the project image `docker build -t imagename .` or download the image from 
+   the [link](https://hub.docker.com/layers/152871320/blackapple789/defaultrepository/marvelapi/images/sha256-54187b7164d1dbe27759761ba3aacb7c5a254e7f239381bacc85e39e29b8d1e9?context=explore)
+   1. If there is a problem with the database - in *application.properties*
+      change `jdbc:mysql://192.168.0.60:3306/webmarvel` *192.168.0.60* to ipv4 of your machine
+4. Start the container `docker run -p 8080:8080 imagename`
+
 ### Authors
 
 For communication and questions, you can write to the mail:
