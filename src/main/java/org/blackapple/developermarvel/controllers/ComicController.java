@@ -59,7 +59,7 @@ public class ComicController {
         response.put("totalItems", comicsPage.getTotalElements());
         response.put("totalPages", comicsPage.getTotalPages());
 
-        return response!=null && !response.isEmpty()
+        return comics!=null && !comics.isEmpty()
                 ? new ResponseEntity<>(response, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

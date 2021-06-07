@@ -68,7 +68,7 @@ public class CharacterController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping(value = "/character/{characterId}/comics")
+    @GetMapping(value = "/{characterId}/comics")
     public ResponseEntity<Map<String, Object>> readComics(@PathVariable(name = "characterId") Long id,
                                                           @RequestParam(required = false) String title,
                                                           @RequestParam (defaultValue = "0") int page,
