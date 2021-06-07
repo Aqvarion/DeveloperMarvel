@@ -2,17 +2,18 @@ package org.blackapple.developermarvel.services;
 
 import org.blackapple.developermarvel.entities.Character;
 import org.blackapple.developermarvel.entities.Comic;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
 
 public interface ComicService {
 
     void create(Comic comic, MultipartFile file) throws IOException;
 
-    List<Comic> readAll();
+    Page<Comic> readAll(Pageable pageable);
 
     Comic read(Long id);
 
@@ -20,6 +21,6 @@ public interface ComicService {
 
     boolean delete(Long id);
 
-    Set<Character> readCharacters(Long id);
+    Page<Character> readCharacters(Long id, Pageable pageable);
 
 }

@@ -4,14 +4,16 @@ import org.blackapple.developermarvel.entities.Character;
 import org.blackapple.developermarvel.entities.Comic;
 import org.blackapple.developermarvel.services.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/v1/public/characters")
@@ -31,11 +33,22 @@ public class CharacterController {
     }
 
     @GetMapping(value = "")
-    public ResponseEntity<List<Character>> read() {
-        final List<Character> characters = characterService.readAll();
+    public ResponseEntity<Map<String, Object>> read(@RequestParam(defaultValue = "0") int page,
+                                                @RequestParam(defaultValue = "5") int size) {
 
-        return characters != null && !characters.isEmpty()
-                ? new ResponseEntity<>(characters, HttpStatus.OK)
+        Pageable pageable = PageRequest.of(page,size);
+
+        Page<Character> charactersPage = characterService.readAll(pageable);
+        List<Character> characters = charactersPage.getContent();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("characters", characters);
+        response.put("currentPage", charactersPage.getNumber());
+        response.put("totalItems", charactersPage.getTotalElements());
+        response.put("totalPages", charactersPage.getTotalPages());
+
+        return characters!= null && !characters.isEmpty()
+                ? new ResponseEntity<>(response, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -49,13 +62,26 @@ public class CharacterController {
     }
 
     @GetMapping(value = "/character/{characterId}/comics")
-    public ResponseEntity<Set<Comic>> readComics(@PathVariable(name = "characterId") Long id){
-        final Set<Comic> comics = characterService.readComics(id);
+    public ResponseEntity<Map<String, Object>> readComics(@PathVariable(name = "characterId") Long id,
+                                                          @RequestParam (defaultValue = "0") int page,
+                                                          @RequestParam(defaultValue = "5") int size){
+
+        Pageable pageable = PageRequest.of(page,size);
+
+        Page<Comic> comicsPage = characterService.readComics(id, pageable);
+        List<Comic> comics = comicsPage.getContent();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("comics", comics);
+        response.put("currentPage", comicsPage.getNumber());
+        response.put("totalItems", comicsPage.getTotalElements());
+        response.put("totalPages", comicsPage.getTotalPages());
 
         return comics!=null && !comics.isEmpty()
-                ? new ResponseEntity<>(comics, HttpStatus.OK)
+                ? new ResponseEntity<>(response, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
 
     @PutMapping("/{characterId}")
     public ResponseEntity<?> update(@PathVariable(name = "characterId") Long id, @RequestPart(name = "character") Character character, @RequestPart(name = "img") MultipartFile img) throws IOException {

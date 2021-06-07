@@ -2,24 +2,29 @@ package org.blackapple.developermarvel.services;
 
 import org.blackapple.developermarvel.entities.Character;
 import org.blackapple.developermarvel.entities.Comic;
+import org.blackapple.developermarvel.repostiroies.CharacterRepository;
 import org.blackapple.developermarvel.repostiroies.ComicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
-import java.util.Set;
 
 @Component("ComicService")
 public class ComicServiceImpl implements ComicService{
 
     private final ComicRepository comicRepository;
+    private final CharacterRepository characterRepository;
 
     @Autowired
-    public ComicServiceImpl(ComicRepository comicRepository){
+    public ComicServiceImpl(ComicRepository comicRepository, CharacterRepository characterRepository){
+
         this.comicRepository=comicRepository;
+        this.characterRepository=characterRepository;
     }
 
     @Override
@@ -29,8 +34,8 @@ public class ComicServiceImpl implements ComicService{
     }
 
     @Override
-    public List<Comic> readAll() {
-        return comicRepository.findAll();
+    public Page<Comic> readAll(Pageable pageable) {
+        return comicRepository.findAll(pageable);
     }
 
     @Override
@@ -63,9 +68,9 @@ public class ComicServiceImpl implements ComicService{
     }
 
     @Override
-    public Set<Character> readCharacters(Long id) {
+    public Page<Character> readCharacters(Long id, Pageable pageable) {
         if(comicRepository.findById(id).isPresent())
-            return comicRepository.findById(id).get().getCharacters();
+            return characterRepository.findByComicsId(id, pageable);
         return null;
     }
 }
