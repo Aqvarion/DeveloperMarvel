@@ -17,7 +17,7 @@ public class Character {
     @Column(name = "id")
     private Long id;
     @Column(name = "name")
-    private String title;
+    private String name;
     @Column(name = "biography")
     private String biography;
     @Lob
@@ -32,9 +32,9 @@ public class Character {
     public Character() {
     }
 
-    public Character(Long id, String title, String biography) {
+    public Character(Long id, String name, String biography) {
         this.id = id;
-        this.title = title;
+        this.name = name;
         this.biography = biography;
     }
 
@@ -46,8 +46,8 @@ public class Character {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
     public String getBiography() {
@@ -71,12 +71,12 @@ public class Character {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Character character = (Character) o;
-        return Objects.equals(id, character.id) && Objects.equals(title, character.title) && Objects.equals(biography, character.biography) && Arrays.equals(img, character.img);
+        return Objects.equals(id, character.id) && Objects.equals(name, character.name) && Objects.equals(biography, character.biography) && Arrays.equals(img, character.img);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, title, biography);
+        int result = Objects.hash(id, name, biography);
         result = 31 * result + Arrays.hashCode(img);
         return result;
     }
@@ -85,7 +85,7 @@ public class Character {
     public String toString() {
         return "Character{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
+                ", title='" + name + '\'' +
                 ", biography='" + biography + '\'' +
                 ", img=" + Arrays.toString(img) +
                 ", comics=" + comics +

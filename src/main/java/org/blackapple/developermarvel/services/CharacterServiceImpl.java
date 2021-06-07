@@ -34,8 +34,12 @@ public class CharacterServiceImpl implements CharacterService{
     @Override
     public Page<Character> readAll(Pageable paging) {
 
-
         return characterRepository.findAll(paging);
+    }
+
+    @Override
+    public Page<Character> readAll(String name, Pageable pageable){
+        return characterRepository.findByNameContaining(name, pageable);
     }
 
     @Override
@@ -69,6 +73,13 @@ public class CharacterServiceImpl implements CharacterService{
     public Page<Comic> readComics(Long id, Pageable pageable) {
         if(characterRepository.findById(id).isPresent())
             return comicRepository.findByCharactersId(id, pageable);
+        return null;
+    }
+
+    @Override
+    public Page<Comic> readComics(Long id, String title, Pageable pageable) {
+        if(characterRepository.findById(id).isPresent())
+            return comicRepository.findByCharactersIdAndTitleContaining(id,title,pageable);
         return null;
     }
 }

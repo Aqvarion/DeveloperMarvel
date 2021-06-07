@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,12 +39,18 @@ public class ComicController {
     }
 
     @GetMapping(value = "")
-    public ResponseEntity<Map<String, Object>> read(@RequestParam(defaultValue = "0") int page,
+    public ResponseEntity<Map<String, Object>> read(@RequestParam(required = false) String title,
+                                                    @RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "5") int size) {
 
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page,size, Sort.Direction.ASC, "title");
 
-        Page<Comic> comicsPage = comicService.readAll(pageable);
+        Page<Comic> comicsPage;
+        if (title==null)
+            comicsPage = comicService.readAll(pageable);
+        else
+            comicsPage = comicService.readAll(title,pageable);
+
         List<Comic> comics = comicsPage.getContent();
 
         Map<String, Object> response = new HashMap<>();
@@ -68,12 +75,18 @@ public class ComicController {
 
     @GetMapping(value = "/{comicId}/characters")
     public ResponseEntity<Map<String, Object>> readCharacters(@PathVariable(name = "comicId") Long id,
-                                                         @RequestParam (defaultValue = "0") int page,
-                                                         @RequestParam(defaultValue = "5") int size){
+                                                              @RequestParam(required = false) String name,
+                                                              @RequestParam (defaultValue = "0") int page,
+                                                              @RequestParam(defaultValue = "5") int size){
 
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page,size, Sort.Direction.ASC,"name");
 
-        Page<Character> charactersPage = comicService.readCharacters(id, pageable);
+        Page<Character> charactersPage;
+        if (name==null)
+            charactersPage = comicService.readCharacters(id, pageable);
+        else
+            charactersPage = comicService.readCharacters(id,name,pageable);
+
         List<Character> characters = charactersPage.getContent();
 
         Map<String, Object> response = new HashMap<>();
@@ -86,15 +99,6 @@ public class ComicController {
                 ? new ResponseEntity<>(response, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-//    @GetMapping(value = "/{comicId}/characters")
-//    public ResponseEntity<List<Character>> readCharacters(@PathVariable(name = "comicId") Long id){
-//        final List<Character> characters = comicService.readCharacters(id);
-//
-//        return characters!=null && !characters.isEmpty()
-//                ? new ResponseEntity<>(characters, HttpStatus.OK)
-//                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//    }
 
     @PutMapping(value = "/{comicId}")
     public ResponseEntity<?> update(@PathVariable(name = "comicId") Long id, @RequestPart(name = "comic") Comic comic, @RequestPart(name = "img") MultipartFile img) throws IOException {

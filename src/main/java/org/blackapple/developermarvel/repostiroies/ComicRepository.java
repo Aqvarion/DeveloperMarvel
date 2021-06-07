@@ -9,5 +9,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ComicRepository extends JpaRepository<Comic, Long> {
+    Page<Comic> findByTitleContaining(String title, Pageable pageable);
+
     Page<Comic> findByCharactersId(Long id, Pageable pageable);
+    Page<Comic> findByCharactersIdAndTitleContaining(Long id, String title, Pageable pageable);
 }

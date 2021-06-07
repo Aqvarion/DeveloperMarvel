@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,12 +34,18 @@ public class CharacterController {
     }
 
     @GetMapping(value = "")
-    public ResponseEntity<Map<String, Object>> read(@RequestParam(defaultValue = "0") int page,
-                                                @RequestParam(defaultValue = "5") int size) {
+    public ResponseEntity<Map<String, Object>> read(@RequestParam(required = false) String name,
+                                                    @RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "5") int size) {
 
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page,size, Sort.Direction.ASC, "name");
 
-        Page<Character> charactersPage = characterService.readAll(pageable);
+        Page<Character> charactersPage;
+        if (name==null)
+            charactersPage = characterService.readAll(pageable);
+        else
+            charactersPage = characterService.readAll(name,pageable);
+
         List<Character> characters = charactersPage.getContent();
 
         Map<String, Object> response = new HashMap<>();
@@ -63,12 +70,18 @@ public class CharacterController {
 
     @GetMapping(value = "/character/{characterId}/comics")
     public ResponseEntity<Map<String, Object>> readComics(@PathVariable(name = "characterId") Long id,
+                                                          @RequestParam(required = false) String title,
                                                           @RequestParam (defaultValue = "0") int page,
                                                           @RequestParam(defaultValue = "5") int size){
 
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page,size,Sort.Direction.ASC,"title");
 
-        Page<Comic> comicsPage = characterService.readComics(id, pageable);
+        Page<Comic> comicsPage;
+        if (title==null)
+            comicsPage = characterService.readComics(id, pageable);
+        else
+            comicsPage = characterService.readComics(id, title, pageable);
+
         List<Comic> comics = comicsPage.getContent();
 
         Map<String, Object> response = new HashMap<>();

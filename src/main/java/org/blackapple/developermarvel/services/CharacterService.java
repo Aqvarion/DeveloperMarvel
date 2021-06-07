@@ -14,6 +14,8 @@ public interface CharacterService {
 
     Page<Character> readAll(Pageable paging);
 
+    Page<Character> readAll(String name, Pageable pageable);
+
     Character read(Long id);
 
     boolean update(Character character, MultipartFile img, Long id) throws IOException;
@@ -21,4 +23,7 @@ public interface CharacterService {
     boolean delete(Long id);
 
     Page<Comic> readComics(Long id, Pageable pageable);
+
+    Page<Comic> readComics(Long id, String title, Pageable pageable);
+
 }
