@@ -1,9 +1,9 @@
-package org.blackapple.developermarvel.services;
+package org.blackapple.marvelapi.services;
 
 import java.io.IOException;
 
-import org.blackapple.developermarvel.entities.Character;
-import org.blackapple.developermarvel.entities.Comic;
+import org.blackapple.marvelapi.entities.Character;
+import org.blackapple.marvelapi.entities.Comic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;

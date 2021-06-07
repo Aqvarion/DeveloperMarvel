@@ -1,4 +1,4 @@
-package org.blackapple.developermarvel.entities;
+package org.blackapple.marvelapi.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

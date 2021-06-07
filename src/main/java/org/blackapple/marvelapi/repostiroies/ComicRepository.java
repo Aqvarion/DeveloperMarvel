@@ -1,7 +1,6 @@
-package org.blackapple.developermarvel.repostiroies;
+package org.blackapple.marvelapi.repostiroies;
 
-import org.blackapple.developermarvel.entities.Character;
-import org.blackapple.developermarvel.entities.Comic;
+import org.blackapple.marvelapi.entities.Comic;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

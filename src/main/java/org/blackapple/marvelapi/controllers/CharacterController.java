@@ -1,8 +1,10 @@
-package org.blackapple.developermarvel.controllers;
+package org.blackapple.marvelapi.controllers;
 
-import org.blackapple.developermarvel.entities.Character;
-import org.blackapple.developermarvel.entities.Comic;
-import org.blackapple.developermarvel.services.CharacterService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.blackapple.marvelapi.entities.Character;
+import org.blackapple.marvelapi.entities.Comic;
+import org.blackapple.marvelapi.services.CharacterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +20,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping(value = "/v1/public/characters")
+@Tag(name = "Character API", description = "Interacting with character data")
 public class CharacterController {
 
     private final CharacterService characterService;
@@ -28,12 +31,15 @@ public class CharacterController {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<?> create(@RequestPart(name = "character") Character character,@RequestPart(name = "img") MultipartFile img) throws IOException {
+    @Operation(summary = "Adds a new character to the database", description = "Allows you to add a new character to the database. The request must contain a part character with main data, and img part with an image file")
+    public ResponseEntity<?> create(@RequestPart(name = "character") Character character,
+                                    @RequestPart(name = "img") MultipartFile img) throws IOException {
         characterService.create(character,img);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping(value = "")
+    @Operation(summary = "Getting a list of characters", description = "Allows you to get a list of characters, with their properties (id, name, biography)")
     public ResponseEntity<Map<String, Object>> read(@RequestParam(required = false) String name,
                                                     @RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "5") int size) {
@@ -54,12 +60,13 @@ public class CharacterController {
         response.put("totalItems", charactersPage.getTotalElements());
         response.put("totalPages", charactersPage.getTotalPages());
 
-        return characters!= null && !characters.isEmpty()
+        return !characters.isEmpty()
                 ? new ResponseEntity<>(response, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "/{characterId}")
+    @Operation(summary = "Getting a character by id", description = "Allows you to get a specific character by id")
     public ResponseEntity<Character> read(@PathVariable(name = "characterId") Long id) {
         final Character character = characterService.read(id);
 
@@ -69,6 +76,7 @@ public class CharacterController {
     }
 
     @GetMapping(value = "/{characterId}/comics")
+    @Operation(summary = "Getting a list of comics of a character by its ID", description = "Allows you to get a list of comics containing a specific character by ID")
     public ResponseEntity<Map<String, Object>> readComics(@PathVariable(name = "characterId") Long id,
                                                           @RequestParam(required = false) String title,
                                                           @RequestParam (defaultValue = "0") int page,
@@ -90,14 +98,17 @@ public class CharacterController {
         response.put("totalItems", comicsPage.getTotalElements());
         response.put("totalPages", comicsPage.getTotalPages());
 
-        return comics!=null && !comics.isEmpty()
+        return !comics.isEmpty()
                 ? new ResponseEntity<>(response, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 
     @PutMapping("/{characterId}")
-    public ResponseEntity<?> update(@PathVariable(name = "characterId") Long id, @RequestPart(name = "character") Character character, @RequestPart(name = "img") MultipartFile img) throws IOException {
+    @Operation(summary = "Modifies an existing character", description = "Allows you to modify an existing character by ID. Contains two parts character and img")
+    public ResponseEntity<?> update(@PathVariable(name = "characterId") Long id,
+                                    @RequestPart(name = "character") Character character,
+                                    @RequestPart(name = "img") MultipartFile img) throws IOException {
         final boolean updated = characterService.update(character,img,id);
 
         return updated
@@ -106,6 +117,7 @@ public class CharacterController {
     }
 
     @DeleteMapping("/{characterId}")
+    @Operation(summary = "Removes existing character", description = "Removes the existing character by ID.")
     public ResponseEntity<?> delete(@PathVariable(name = "characterId") Long id) {
         final boolean deleted = characterService.delete(id);
 

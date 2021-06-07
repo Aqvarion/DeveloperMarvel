@@ -1,9 +1,9 @@
-package org.blackapple.developermarvel.services;
+package org.blackapple.marvelapi.services;
 
-import org.blackapple.developermarvel.entities.Character;
-import org.blackapple.developermarvel.entities.Comic;
-import org.blackapple.developermarvel.repostiroies.CharacterRepository;
-import org.blackapple.developermarvel.repostiroies.ComicRepository;
+import org.blackapple.marvelapi.entities.Character;
+import org.blackapple.marvelapi.entities.Comic;
+import org.blackapple.marvelapi.repostiroies.CharacterRepository;
+import org.blackapple.marvelapi.repostiroies.ComicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Base64;
-import java.util.List;
 
 @Component("ComicService")
 public class ComicServiceImpl implements ComicService{

@@ -1,8 +1,10 @@
-package org.blackapple.developermarvel.controllers;
+package org.blackapple.marvelapi.controllers;
 
-import org.blackapple.developermarvel.entities.Character;
-import org.blackapple.developermarvel.entities.Comic;
-import org.blackapple.developermarvel.services.ComicService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.blackapple.marvelapi.entities.Character;
+import org.blackapple.marvelapi.entities.Comic;
+import org.blackapple.marvelapi.services.ComicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,10 +19,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping(value = "/v1/public/comics")
+@Tag(name = "Comic API", description = "Interacting with comic data")
 public class ComicController {
 
     private final ComicService comicService;
@@ -32,13 +34,16 @@ public class ComicController {
 
 
     @PostMapping(value = "")
-    public ResponseEntity<?> create(@RequestPart(name = "comic") Comic comic, @RequestPart(name = "img") MultipartFile img) throws IOException {
+    @Operation(summary = "Adds a new comic to the database", description = "Allows you to add a new comic to the database. The request must contain a part comic with main data, and img part with an image file")
+    public ResponseEntity<?> create(@RequestPart(name = "comic") Comic comic,
+                                    @RequestPart(name = "img") MultipartFile img) throws IOException {
 
         comicService.create(comic, img);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping(value = "")
+    @Operation(summary = "Getting a list of comics", description = "Allows you to get a list of comics, with their properties (id, title, author, published, descript, image)")
     public ResponseEntity<Map<String, Object>> read(@RequestParam(required = false) String title,
                                                     @RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "5") int size) {
@@ -59,12 +64,13 @@ public class ComicController {
         response.put("totalItems", comicsPage.getTotalElements());
         response.put("totalPages", comicsPage.getTotalPages());
 
-        return comics!=null && !comics.isEmpty()
+        return !comics.isEmpty()
                 ? new ResponseEntity<>(response, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "/{comicId}")
+    @Operation(summary = "Getting a comic by id", description = "Allows you to get a specific comic by id")
     public ResponseEntity<Comic> read(@PathVariable(name = "comicId") Long id){
         final Comic comic = comicService.read(id);
 
@@ -74,6 +80,7 @@ public class ComicController {
     }
 
     @GetMapping(value = "/{comicId}/characters")
+    @Operation(summary = "Getting a list of characters of a comic by its ID", description = "Allows you to get a list of characters contained in a specific comic by ID")
     public ResponseEntity<Map<String, Object>> readCharacters(@PathVariable(name = "comicId") Long id,
                                                               @RequestParam(required = false) String name,
                                                               @RequestParam (defaultValue = "0") int page,
@@ -95,12 +102,13 @@ public class ComicController {
         response.put("totalItems", charactersPage.getTotalElements());
         response.put("totalPages", charactersPage.getTotalPages());
 
-        return characters!=null && !characters.isEmpty()
+        return !characters.isEmpty()
                 ? new ResponseEntity<>(response, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping(value = "/{comicId}")
+    @Operation(summary = "Modifies an existing comic", description = "Allows you to modify an existing comic by ID. Contains two parts comic and img")
     public ResponseEntity<?> update(@PathVariable(name = "comicId") Long id, @RequestPart(name = "comic") Comic comic, @RequestPart(name = "img") MultipartFile img) throws IOException {
         final boolean updated = comicService.update(comic,img,id);
 
@@ -110,6 +118,7 @@ public class ComicController {
     }
 
     @DeleteMapping(value = "/{comicId}")
+    @Operation(summary = "Removes existing comic", description = "Removes the existing comic by ID.")
     public ResponseEntity<?> delete(@PathVariable(name = "comicId") Long id){
         final boolean deleted = comicService.delete(id);
 

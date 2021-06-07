@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.blackapple</groupId>
-    <artifactId>DeveloperMarvel</artifactId>
+    <artifactId>marvelapi</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -88,7 +88,7 @@
 <!--                <configuration>-->
 <!--                    <archive>-->
 <!--                        <manifest>-->
-<!--                            <mainClass>org.blackapple.developermarvel.DeveloperMarvelApplication</mainClass>-->
+<!--                            <mainClass>org.blackapple.marvelapi.DeveloperMarvelApplication</mainClass>-->
 <!--                        </manifest>-->
 <!--                    </archive>-->
 <!--                </configuration>-->
@@ -98,7 +98,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>org.blackapple.developermarvel.DeveloperMarvelApplication</mainClass>
+                    <mainClass>org.blackapple.marvelapi.DeveloperMarvelApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
